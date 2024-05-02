@@ -1,14 +1,17 @@
 $(document).ready(function() {
-    $('#sendButton').click(function() {
+    $('#fetchButton').click(function() {
         var host = $('#hostInput').val();
         var port = $('#portInput').val();
+        var interface = $('#interfaceInput').val();
         var method = $('#methodSelect').val();
         var body = $('#bodyInput').val();
 
+        var url = `https://${host}:${port}/restconf/data/ietf-interfaces:interfaces/interface=${interface}`;
+
         $.ajax({
-            url: '/' + method.toLowerCase() + '_interface_info',
+            url: url,
             type: method,
-            data: JSON.stringify({host: host, port: port, body: body}), 
+            data: JSON.stringify({host: host, port: port, interface: interface, body: body}),
             contentType: 'application/json',
             success: function(data) {
                 $('#interfaceInfo').html(JSON.stringify(data, null, 2));

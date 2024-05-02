@@ -3,8 +3,8 @@ import requests
 
 app = Flask(__name__)
 
-def get_interface_info(host, port):
-    url = f"https://{host}:{port}/restconf/data/ietf-interfaces:interfaces/interface=GigabitEthernet1"
+def get_interface_info(host, port, interface):
+    url = f"https://{host}:{port}/restconf/data/ietf-interfaces:interfaces/interface={interface}"
     headers = {
         "Accept": "application/yang-data+json",
         "Content-Type": "application/yang-data+json",
@@ -18,15 +18,15 @@ def get_interface_info(host, port):
     else:
         return None
 
-def post_interface_info(host, port):
+def post_interface_info(host, port, interface):
     # TODO
     pass
 
-def put_interface_info(host, port):
+def put_interface_info(host, port, interface):
     # TODO
     pass
 
-def delete_interface_info(host, port):
+def delete_interface_info(host, port, interface):
     # TODO
     pass
 
@@ -38,28 +38,32 @@ def index():
 def fetch_interface_info_get():
     host = request.args.get('host')
     port = request.args.get('port')
-    interface_info = get_interface_info(host, port)
+    interface = request.args.get('interface')
+    interface_info = get_interface_info(host, port, interface)
     return jsonify(interface_info)
 
 @app.route('/post_interface_info', methods=['POST'])
 def fetch_interface_info_post():
     host = request.json.get('host')
     port = request.json.get('port')
-    interface_info = post_interface_info(host, port)
+    interface = request.json.get('interface')
+    interface_info = post_interface_info(host, port, interface)
     return jsonify(interface_info)
 
 @app.route('/put_interface_info', methods=['PUT'])
 def fetch_interface_info_put():
     host = request.json.get('host')
     port = request.json.get('port')
-    interface_info = put_interface_info(host, port)
+    interface = request.json.get('interface')
+    interface_info = put_interface_info(host, port, interface)
     return jsonify(interface_info)
 
 @app.route('/delete_interface_info', methods=['DELETE'])
 def fetch_interface_info_delete():
     host = request.json.get('host')
     port = request.json.get('port')
-    interface_info = delete_interface_info(host, port)
+    interface = request.json.get('interface')
+    interface_info = delete_interface_info(host, port, interface)
     return jsonify(interface_info)
 
 if __name__ == '__main__':
