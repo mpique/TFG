@@ -49,6 +49,11 @@ button:hover {
     background-color: #0056b3;
 }
 
+textarea {
+    width: 100%;
+    height: 200px;
+}
+
 #interfaceInfo {
     margin-top: 20px;
     padding: 10px;
