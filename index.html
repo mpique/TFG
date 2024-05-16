@@ -10,27 +10,36 @@
 </head>
 <body>
     <div class="container">
-        <h1>Interface Information</h1>
+        <h1>Config Panel</h1>
         <label for="hostInput">Host:</label>
         <input type="text" id="hostInput" name="hostInput" placeholder="Enter host">
         <label for="portInput">Port:</label>
         <input type="text" id="portInput" name="portInput" placeholder="Enter port">
         <label for="interfaceInput">Interface:</label>
         <input type="text" id="interfaceInput" name="interfaceInput" placeholder="Enter interface">
-        <label for="methodSelect">HTTP Method:</label>
-        <select id="methodSelect">
-            <option value="GET">GET</option>
-            <option value="POST">POST</option>
-            <option value="PUT">PUT</option>
-            <option value="DELETE">DELETE</option>
-        </select>
-        <label for="bodyInput">Body:</label>
-        <textarea id="bodyInput" name="bodyInput" placeholder="Enter request body"></textarea>
-        <button id="sendButton">Send request</button>
+        <button id="toggleButton">Switch to NETCONF</button>
+        <div id="displayText"></div>
+        <div id="restconfTemplate" style="display: none;">
+            <h2>RESTCONF</h2>
+            <label for="methodSelect">HTTP Method:</label>
+            <select id="methodSelect">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+            <label for="bodyInput">Body:</label>
+            <textarea id="bodyInput" name="bodyInput" placeholder="Enter request body"></textarea>
+            <button id="sendButton">Send request</button>
         <div id="interfaceInfo">
         </div>
         <br>
         <button id="copyResponseButton">Copy Response to Body</button>
+</div>
+<div id="netconfTemplate" style="display: none;">
+    <div class="data">
+      <h2>NETCONF</h2>
     </div>
+</div>
 </body>
 </html>

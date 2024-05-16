@@ -1,4 +1,22 @@
 $(document).ready(function() {
+    function toggleMode() {
+        var button = document.getElementById("toggleButton");
+        var displayText = document.getElementById("displayText");
+        var restconfTemplate = document.getElementById("restconfTemplate").innerHTML;
+        var netconfTemplate = document.getElementById("netconfTemplate").innerHTML;
+      
+        if (button.textContent === "Switch to NETCONF") {
+          button.textContent = "Switch to RESTCONF";
+          displayText.innerHTML = netconfTemplate;
+        } else {
+          button.textContent = "Switch to NETCONF";
+          displayText.innerHTML = restconfTemplate;
+        }
+      }
+      
+      document.getElementById("toggleButton").addEventListener("click", toggleMode);
+      
+      document.getElementById("displayText").innerHTML = document.getElementById("restconfTemplate").innerHTML;      
     $('#fetchButton').click(function() {
         var host = $('#hostInput').val();
         var port = $('#portInput').val();
