@@ -2,7 +2,6 @@ import sys, os, warnings, requests, datetime
 from ncclient import manager
 from lxml import etree
 from flask import Flask, render_template, request, jsonify
-from lxml import etree
 
 app = Flask(__name__)
 
