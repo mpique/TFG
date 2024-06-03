@@ -62,3 +62,12 @@ textarea {
     background-color: #f9f9f9;
     white-space: pre-wrap;
 }
+
+#rpcResponse {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    white-space: pre-wrap;
+}

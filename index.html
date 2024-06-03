@@ -15,8 +15,8 @@
         <input type="text" id="hostInput" name="hostInput" placeholder="Enter host">
         <label for="portInput">Port:</label>
         <input type="text" id="portInput" name="portInput" placeholder="Enter port">
-        <label for="interfaceInput">Interface:</label>
-        <input type="text" id="interfaceInput" name="interfaceInput" placeholder="Enter interface">
+        <label for="interfaceInput">Interface(s):</label>
+        <input type="text" id="interfaceInput" name="interfaceInput" placeholder="Enter interfaces separated by spaces">        
         <button id="toggleButton">Switch to NETCONF</button>
         <div id="displayText"></div>
         <div id="restconfTemplate" style="display: none;">
@@ -40,6 +40,17 @@
     <div class="data">
       <h2>NETCONF</h2>
     </div>
+    <label for="usernameInput">Host:</label>
+    <input type="text" id="usernameInput" name="usernameInput" placeholder="Enter username">
+    <label for="passwordInput">Port:</label>
+    <input type="text" id="passwordInput" name="passwordInput" placeholder="Enter password">
+    <label for="rpcBodyInput">RPC Body:</label>
+    <textarea id="rpcBodyInput" name="rpcBodyInput" rows="4" placeholder="Enter RPC body"></textarea>
+    <button id="sendRpcButton">Send RPC</button>
+    <div id="rpcResponse">
+    </div>
+    <br>
+    <button id="copyRpcResponseButton">Copy Response to Body</button>
 </div>
 </body>
 </html>

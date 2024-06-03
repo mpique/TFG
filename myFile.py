@@ -1,70 +1,68 @@
+import sys, os, warnings, requests, datetime
+from ncclient import manager
+from lxml import etree
 from flask import Flask, render_template, request, jsonify
-import requests
+from lxml import etree
 
 app = Flask(__name__)
 
-def get_interface_info(host, port, interface):
+def send_request(method, host, port, interface, body=None):
     url = f"https://{host}:{port}/restconf/data/ietf-interfaces:interfaces/interface={interface}"
     headers = {
         "Accept": "application/yang-data+json",
         "Content-Type": "application/yang-data+json",
     }
+    response = requests.request(method, url, headers=headers, json=body, verify=False)
 
-    response = requests.get(url, headers=headers)
-
-    if response.status_code == 200:
-        interface_info = response.json()
-        return interface_info
+    if response.status_code in [200, 201, 204]:
+        return response.json() if response.content else {"message": "Request successful"}
     else:
-        return None
-
-def post_interface_info(host, port, interface):
-    # TODO
-    pass
-
-def put_interface_info(host, port, interface):
-    # TODO
-    pass
-
-def delete_interface_info(host, port, interface):
-    # TODO
-    pass
+        return {"error": response.json()}
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/get_interface_info', methods=['GET'])
-def fetch_interface_info_get():
-    host = request.args.get('host')
-    port = request.args.get('port')
-    interface = request.args.get('interface')
-    interface_info = get_interface_info(host, port, interface)
-    return jsonify(interface_info)
+@app.route('/fetch_interface_info', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def fetch_interface_info():
+    data = request.json
+    host = data.get('host')
+    port = data.get('port')
+    interfaces = data.get('interfaces').split(',')
+    body = data.get('body')
 
-@app.route('/post_interface_info', methods=['POST'])
-def fetch_interface_info_post():
-    host = request.json.get('host')
-    port = request.json.get('port')
-    interface = request.json.get('interface')
-    interface_info = post_interface_info(host, port, interface)
-    return jsonify(interface_info)
+    results = {}
+    for interface in interfaces:
+        response_data = send_restconf_request(request.method, host, port, interface.strip(), body)
+        results[interface.strip()] = response_data
+    return jsonify(results)
 
-@app.route('/put_interface_info', methods=['PUT'])
-def fetch_interface_info_put():
-    host = request.json.get('host')
-    port = request.json.get('port')
-    interface = request.json.get('interface')
-    interface_info = put_interface_info(host, port, interface)
-    return jsonify(interface_info)
+@app.route('/send_rpc')
+def send_rpc():
 
-@app.route('/delete_interface_info', methods=['DELETE'])
-def fetch_interface_info_delete():
-    host = request.json.get('host')
-    port = request.json.get('port')
-    interface = request.json.get('interface')
-    interface_info = delete_interface_info(host, port, interface)
-    return jsonify(interface_info)
+    data = request.json
+    interfaces = data.get('interfaces').split(',')
+    for interface in interfaces:
+
+        current_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
+        config_e = etree.Element("config")
+        configuration = etree.SubElement(config_e, "interface-configurations", data.get('rpc'))
+        interface_cfg = etree.SubElement(configuration, "interface-configuration")
+        active = etree.SubElement(interface_cfg, "active").text = 'act'
+        interface_name = etree.SubElement(interface_cfg, "interface-name").text = interface
+        description = etree.SubElement(interface_cfg, "description").text  = 'NETCONF configured - ' + current_time
+
+        with manager.connect(host=data.get('host'), port=data.get('port'), username=data.get('username'), password=data.get('rpc'),
+                        hostkey_verify=False, device_params={'name':'default'},
+                        look_for_keys=False, allow_agent=False) as m:
+            with m.locked(target="candidate"):
+                m.edit_config(config=config_e, default_operation="merge", target="candidate")
+                m.commit()
+
+    results =  {"message": "RPC sent successfuly to interfaces " + data.get('interfaces')}
+
+    return jsonify(results)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
