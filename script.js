@@ -19,16 +19,16 @@ $(document).ready(function() {
       document.getElementById("displayText").innerHTML = document.getElementById("restconfTemplate").innerHTML;     
 
       $('#fetchButton').click(function() {
-        var host = $('#hostInput').val();
+        var hosts = $('#hostInput').val().split(' ');
         var port = $('#portInput').val();
-        var interfaces = $('#interfaceInput').val().split(' ');
+        var interface = $('#interfaceInput').val();
         var method = $('#methodSelect').val();
         var body = $('#bodyInput').val();
 
         // Clear
         $('#interfaceInfo').empty(); 
 
-        interfaces.forEach(function(interface) {
+        hosts.forEach(function(host) {
             var url = `https://${host}:${port}/restconf/data/ietf-interfaces:interfaces/interface=${interface}`;
 
             $.ajax({

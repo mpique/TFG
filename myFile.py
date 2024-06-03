@@ -26,23 +26,23 @@ def index():
 @app.route('/fetch_interface_info', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def fetch_interface_info():
     data = request.json
-    host = data.get('host')
+    hosts = data.get('host').split(' ')
     port = data.get('port')
-    interfaces = data.get('interfaces').split(',')
+    interface = data.get('interface')
     body = data.get('body')
 
     results = {}
-    for interface in interfaces:
-        response_data = send_restconf_request(request.method, host, port, interface.strip(), body)
-        results[interface.strip()] = response_data
+    for host in hosts:
+        response_data = send_restconf_request(request.method, host.strip(), port, interface, body)
+        results[host.strip()] = response_data
     return jsonify(results)
 
 @app.route('/send_rpc')
 def send_rpc():
 
     data = request.json
-    interfaces = data.get('interfaces').split(',')
-    for interface in interfaces:
+    hosts = data.get('hosts').split(' ')
+    for host in hosts:
 
         current_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
         config_e = etree.Element("config")
