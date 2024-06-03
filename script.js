@@ -58,18 +58,20 @@ $(document).ready(function() {
         $('#rpcBodyInput').val(responseData);
     });
 
-    $('#sendRpcButton').click(function() {
+    $('#editConfigRpcButton').click(function() {
         var host = $('#hostInput').val();
         var port = $('#portInput').val();
-        var rpc = $('#rpcBodyInput').val();
         var username = $('#usernameInput').val();
         var password = $('#passwordInput').val();
-        var url = '/send_rpc';
+        var name = $('#nameInput').val();
+        var description = $('#descriptionInput').val();
+        var url = '/edit_config_rpc';
 
         var requestData = {
             host: host,
             port: port,
-            rpc: rpc,
+            name: name,
+            description: description,
             username: username,
             password: password,
         };
@@ -89,4 +91,35 @@ $(document).ready(function() {
             }
         });
     });
+
+    $('#deleteConfigRpcButton').click(function() {
+        var host = $('#hostInput').val();
+        var port = $('#portInput').val();
+        var username = $('#usernameInput').val();
+        var password = $('#passwordInput').val();
+        var url = '/delete_config_rpc';
+
+        var requestData = {
+            host: host,
+            port: port,
+            username: username,
+            password: password,
+        };
+        // Clear
+        $('#rpcResponse').empty();  
+
+        $.ajax({
+            url: url,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(requestData),
+        success: function(data) {
+            $('#rpcResponse').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
+        },
+        error: function(error) {
+            $('#rpcResponse').append('<pre>' + JSON.stringify(error.responseJSON, null, 2) + '</pre>');
+            }
+        });
+    });
+
 });

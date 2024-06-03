@@ -37,7 +37,7 @@ def fetch_interface_info():
         results[host.strip()] = response_data
     return jsonify(results)
 
-@app.route('/send_rpc')
+@app.route('/edit_config_rpc')
 def send_rpc():
 
     data = request.json
@@ -46,20 +46,38 @@ def send_rpc():
 
         current_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
         config_e = etree.Element("config")
-        configuration = etree.SubElement(config_e, "interface-configurations", data.get('rpc'))
+        configuration = etree.SubElement(config_e, "interface-configurations", nsmap = {None: 'http://cisco.com/ns/yang/Cisco-IOS-XR-ifmgr-cfg'})
         interface_cfg = etree.SubElement(configuration, "interface-configuration")
         active = etree.SubElement(interface_cfg, "active").text = 'act'
-        interface_name = etree.SubElement(interface_cfg, "interface-name").text = interface
-        description = etree.SubElement(interface_cfg, "description").text  = 'NETCONF configured - ' + current_time
+        interface_name = etree.SubElement(interface_cfg, "interface-name").text = data.get('name')
+        description = etree.SubElement(interface_cfg, "description").text  = data.get('description')
 
-        with manager.connect(host=data.get('host'), port=data.get('port'), username=data.get('username'), password=data.get('rpc'),
+        with manager.connect(host=data.get('host'), port=data.get('port'), username=data.get('username'), password=data.get('password'),
                         hostkey_verify=False, device_params={'name':'default'},
                         look_for_keys=False, allow_agent=False) as m:
             with m.locked(target="candidate"):
                 m.edit_config(config=config_e, default_operation="merge", target="candidate")
                 m.commit()
 
-    results =  {"message": "RPC sent successfuly to interfaces " + data.get('interfaces')}
+    results =  {"message": "RPC sent successfuly to hosts " + data.get('hosts')}
+
+    return jsonify(results)
+
+@app.route('/delete_config_rpc')
+def send_rpc():
+
+    data = request.json
+    hosts = data.get('hosts').split(' ')
+    for host in hosts:
+        config_e = etree.Element("config")
+        with manager.connect(host=data.get('host'), port=data.get('port'), username=data.get('username'), password=data.get('password'),
+                        hostkey_verify=False, device_params={'name':'default'},
+                        look_for_keys=False, allow_agent=False) as m:
+            with m.locked(target="running"):
+                m.edit_config(config=config_e, default_operation="delete", target="running")
+                m.commit()
+
+    results =  {"message": "RPC sent successfuly to hosts " + data.get('hosts')}
 
     return jsonify(results)
 
