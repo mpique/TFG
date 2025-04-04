@@ -12,37 +12,51 @@ $(document).ready(function() {
           button.textContent = "Switch to NETCONF";
           displayText.innerHTML = restconfTemplate;
         }
-      }
+    }
       
-      document.getElementById("toggleButton").addEventListener("click", toggleMode);
+    document.getElementById("toggleButton").addEventListener("click", toggleMode);
       
-      document.getElementById("displayText").innerHTML = document.getElementById("restconfTemplate").innerHTML;     
+    document.getElementById("displayText").innerHTML = document.getElementById("restconfTemplate").innerHTML;
 
-      $('#fetchButton').click(function() {
+    $('#sendRequest').click(function() {
         var hosts = $('#hostInput').val().split(' ');
         var port = $('#portInput').val();
         var interface = $('#interfaceInput').val();
+        var username = $('#usernameInput').val();
+        var password = $('#passwordInput').val();
         var method = $('#methodSelect').val();
-        var body = $('#bodyInput').val();
+        var requestBody = $('#bodyInput').val();
 
         // Clear
         $('#interfaceInfo').empty(); 
 
         hosts.forEach(function(host) {
-            var url = `https://${host}:${port}/restconf/data/ietf-interfaces:interfaces/interface=${interface}`;
+            const url = `/fetch_interface_info?host=${encodeURIComponent(host)}&port=${encodeURIComponent(port)}&interface=${encodeURIComponent(interface)}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
-            $.ajax({
-                url: url,
-                type: method,
-                data: method === 'GET' ? null : body,
-                contentType: 'application/json',
-                success: function(data) {
-                    $('#interfaceInfo').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
-                },
-                error: function(error) {
-                    $('#interfaceInfo').append('<pre>' + JSON.stringify(error.responseJSON, null, 2) + '</pre>');
+            let options = {
+                method: httpMethod,
+                headers: {
+                    "Content-Type": "application/json"
                 }
-            });
+            };
+
+            if (requestBody && httpMethod.toUpperCase() !== "GET") {
+                options.body = JSON.stringify(requestBody);
+            }
+
+            fetch(url, options)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error en la red: " + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    $('#interfaceInfo').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
+                })
+                .catch(error => {
+                    $('#interfaceInfo').append('<pre>' + JSON.stringify(error.responseJSON, null, 2) + '</pre>');
+                });
         });
     });
 
@@ -58,68 +72,42 @@ $(document).ready(function() {
         $('#rpcBodyInput').val(responseData);
     });
 
-    $('#editConfigRpcButton').click(function() {
+    // Send an edit-config
+    $('#sendOperation').click(function() {
         var host = $('#hostInput').val();
         var port = $('#portInput').val();
+        var interface = $('#interfaceInput').val();
         var username = $('#usernameInput').val();
         var password = $('#passwordInput').val();
-        var name = $('#nameInput').val();
-        var description = $('#descriptionInput').val();
-        var url = '/edit_config_rpc';
+        var netconf_operation = $('#operationSelect').val();
+        var xmlBody = $('#bodyInput').val();
 
-        var requestData = {
-            host: host,
-            port: port,
-            name: name,
-            description: description,
-            username: username,
-            password: password,
-        };
-        // Clear
-        $('#rpcResponse').empty();  
+        const url = `/fetch_netconf_info?host=${encodeURIComponent(host)}&port=${encodeURIComponent(port)}&interface=${encodeURIComponent(interface)}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&netconf_operation=${encodeURIComponent(netconfOperation)}`;
 
-        $.ajax({
-            url: url,
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(requestData),
-        success: function(data) {
-            $('#rpcResponse').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
-        },
-        error: function(error) {
-            $('#rpcResponse').append('<pre>' + JSON.stringify(error.responseJSON, null, 2) + '</pre>');
+        let options = {
+            method: netconfOperation.toUpperCase() === 'GET' ? 'GET' : 'POST',
+            headers: {
+                "Content-Type": "application/xml"
             }
-        });
-    });
-
-    $('#deleteConfigRpcButton').click(function() {
-        var host = $('#hostInput').val();
-        var port = $('#portInput').val();
-        var username = $('#usernameInput').val();
-        var password = $('#passwordInput').val();
-        var url = '/delete_config_rpc';
-
-        var requestData = {
-            host: host,
-            port: port,
-            username: username,
-            password: password,
         };
-        // Clear
-        $('#rpcResponse').empty();  
 
-        $.ajax({
-            url: url,
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(requestData),
-        success: function(data) {
-            $('#rpcResponse').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
-        },
-        error: function(error) {
-            $('#rpcResponse').append('<pre>' + JSON.stringify(error.responseJSON, null, 2) + '</pre>');
-            }
-        });
+        if (xmlBody && netconfOperation.toLowerCase() !== 'get-config') {
+            options.body = xmlBody;
+        }
+
+        fetch(url, options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network error: " + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                $('#rpcResponse').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
+            })
+            .catch(error => {
+                $('#rpcResponse').append('<pre>' + JSON.stringify(error.responseJSON, null, 2) + '</pre>');
+            });
     });
 
 });

@@ -9,53 +9,54 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Config Panel</h1>
-        <label for="hostInput">Host(s):</label>
-        <input type="text" id="hostInput" name="hostInput" placeholder="Enter hosts separated by blank spaces">
-        <label for="portInput">Port:</label>
-        <input type="text" id="portInput" name="portInput" placeholder="Enter port">
-        <label for="interfaceInput">Interface:</label>
-        <input type="text" id="interfaceInput" name="interfaceInput" placeholder="Enter interface">        
-        <button id="toggleButton">Switch to NETCONF</button>
-        <div id="displayText"></div>
-        <div id="restconfTemplate" style="display: none;">
-            <h2>RESTCONF</h2>
-            <label for="methodSelect">HTTP Method:</label>
-            <select id="methodSelect">
-                <option value="GET">GET</option>
-                <option value="POST">POST</option>
-                <option value="PUT">PUT</option>
-                <option value="DELETE">DELETE</option>
-            </select>
-            <label for="bodyInput">Body:</label>
-            <textarea id="bodyInput" name="bodyInput" placeholder="Enter request body"></textarea>
-            <button id="sendButton">Send request</button>
-        <div id="interfaceInfo">
-        </div>
-        <br>
-        <button id="copyResponseButton">Copy Response to Body</button>
-</div>
-<div id="netconfTemplate" style="display: none;">
-    <div class="data">
-      <h2>NETCONF</h2>
-    </div>
+<div class="container">
+    <h1>Interface Control Panel</h1>
+    <label for="hostInput">Host(s):</label>
+    <input type="text" id="hostInput" name="hostInput" placeholder="Enter hosts separated by blank spaces">
+    <label for="portInput">Port:</label>
+    <input type="text" id="portInput" name="portInput" placeholder="Enter port">
+    <label for="interfaceInput">Interface:</label>
+    <input type="text" id="interfaceInput" name="interfaceInput" placeholder="Enter interface">
     <label for="usernameInput">Username:</label>
     <input type="text" id="usernameInput" name="usernameInput" placeholder="Enter username">
     <label for="passwordInput">Password:</label>
     <input type="text" id="passwordInput" name="passwordInput" placeholder="Enter password">
-    <hr>
-    <label for="nameInput">New interface name:</label>
-    <input type="text" id="nameInput" name="nameInput" placeholder="Enter the new interface name">
-    <label for="descriptionInput">Description:</label>
-    <input type="text" id="descriptionInput" name="descriptionInput" placeholder="Enter the description">
-    <button id="editConfigRpcButton">Edit config</button>
-    <hr>
-        <button id="deleteConfigRpcButton">Delete config</button>    
-    <div id="rpcResponse">
+    <button id="toggleButton">Switch to NETCONF</button>
+    <div id="displayText"></div>
+    <div id="restconfTemplate" style="display: none;">
+        <h2>RESTCONF</h2>
+        <label for="methodSelect">HTTP Method:</label>
+        <select id="methodSelect">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="DELETE">DELETE</option>
+        </select>
+        <label for="bodyInput">Body:</label>
+        <textarea id="bodyInput" name="bodyInput" placeholder="Enter request body"></textarea>
+        <button id="sendRequest">Send request</button>
+        <div id="interfaceInfo">
+        </div>
+        <br>
+        <button id="copyResponseButton">Copy Response to Body</button>
     </div>
-    <br>
-    <button id="copyRpcResponseButton">Copy Response to Body</button>
+    <div id="netconfTemplate" style="display: none;">
+        <div class="data">
+            <h2>NETCONF</h2>
+        </div>
+        <label for="operationSelect">NETCONF Operation:</label>
+        <select id="operationSelect">
+            <option value="edit-config">edit-config</option>
+            <option value="delete-config">delete-config</option>
+        </select>
+        <label for="xmlInput">XML:</label>
+        <textarea id="xmlInput" name="xmlInput" placeholder="Enter the XML body"></textarea>
+        <button id="sendOperation">Send operation</button>
+        <div id="rpcResponse">
+        </div>
+        <br>
+        <button id="copyRpcResponseButton">Copy Response to Body</button>
+    </div>
 </div>
 </body>
 </html>
