@@ -61,7 +61,7 @@ def fetch_netconf_info():
             elif netconf_operation == 'edit-config':
                 if not xml_body:
                     return jsonify({"error": "edit-config requires a body"}), 400
-                response = m.edit_config(target='running', config=xml_body)
+                response = m.edit_config(target='running', config=xml_body, default_operation="merge")
                 result = response.xml
             elif netconf_operation == 'copy-config':
                 response = m.copy_config(target='running', source='startup')
