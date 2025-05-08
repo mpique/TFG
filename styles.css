@@ -2,14 +2,16 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-image: url('images/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #eeeeee;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -35,18 +37,86 @@ select {
 }
 
 button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
+    background: linear-gradient(135deg, #1e88e5, #42a5f5);
+    color: white;
     border: none;
-    border-radius: 5px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
 button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #1565c0, #1e88e5);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+#saveButton {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+#saveButton:hover {
+    background-color: #388e3c;
+}
+
+#groupTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    color: #000000;
+    margin-top: 20px;
+    table-layout: fixed;
+}
+
+#groupTable th,
+#groupTable td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+    vertical-align: middle;
+    min-height: 40px;
+}
+
+#groupTable th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.editable-input {
+    height: 100%;
+    box-sizing: border-box;
+    font-size: inherit;
+    font-family: inherit;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    width: 100%;
+}
+
+.action-btn {
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+.action-btn:hover {
+    background-color: #1565c0;
 }
 
 textarea {

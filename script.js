@@ -13,10 +13,110 @@ $(document).ready(function() {
           displayText.innerHTML = restconfTemplate;
         }
     }
-      
+
     document.getElementById("toggleButton").addEventListener("click", toggleMode);
-      
+
     document.getElementById("displayText").innerHTML = document.getElementById("restconfTemplate").innerHTML;
+
+    function showSaveButton() {
+        const input = document.getElementById('hostInput');
+        const saveButton = document.getElementById('saveButton');
+        const table = document.getElementById('groupTable');
+        const tbody = table.querySelector('tbody');
+
+        let groupCounter = 1;
+
+        input.addEventListener('input', function () {
+            saveButton.style.display = input.value.trim() !== '' ? 'inline-block' : 'none';
+        });
+
+        saveButton.addEventListener('click', function () {
+            const value = input.value.trim();
+            if (value === '') return;
+
+            table.style.display = 'table';
+
+            const row = document.createElement('tr');
+
+            const groupCell = createEditableCell(`Group ${groupCounter}`);
+            const hostCell = createEditableCell(value);
+            const actionCell = createActionCell(row, hostCell, input, saveButton);
+
+            row.appendChild(groupCell);
+            row.appendChild(hostCell);
+            row.appendChild(actionCell);
+            tbody.appendChild(row);
+
+            groupCounter++;
+            input.value = '';
+            saveButton.style.display = 'none';
+        });
+
+        function createEditableCell(text) {
+            const cell = document.createElement('td');
+            cell.textContent = text;
+
+            cell.addEventListener('click', function () {
+                if (cell.querySelector('input')) return;
+
+                const currentText = cell.textContent;
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = currentText;
+                input.classList.add('editable-input');
+
+                cell.textContent = '';
+                cell.appendChild(input);
+                input.focus();
+                input.setSelectionRange(input.value.length, input.value.length);
+
+                function save() {
+                    cell.textContent = input.value.trim() || currentText;
+                }
+
+                input.addEventListener('blur', save);
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                        save();
+                    }
+                });
+            });
+
+
+            return cell;
+        }
+
+        function createActionCell(row, hostCell, input, saveButton) {
+            const cell = document.createElement('td');
+
+            // Select Button
+            const selectBtn = document.createElement('button');
+            selectBtn.textContent = 'Select';
+            selectBtn.classList.add('action-btn');
+            selectBtn.addEventListener('click', function () {
+                input.value = hostCell.textContent.trim();
+                saveButton.style.display = input.value ? 'inline-block' : 'none';
+                input.focus();
+            });
+
+            // Delete Button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.classList.add('action-btn');
+            deleteBtn.addEventListener('click', function () {
+                row.remove();
+                if (tbody.rows.length === 0) {
+                    table.style.display = 'none';
+                }
+            });
+
+            cell.appendChild(selectBtn);
+            cell.appendChild(deleteBtn);
+            return cell;
+        }
+    }
+
+    showSaveButton();
 
     $('#sendRequest').click(function() {
         var hosts = $('#hostInput').val().split(' ');

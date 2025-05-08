@@ -12,15 +12,26 @@
 <div class="container">
     <h1>Interface Control Panel</h1>
     <label for="hostInput">Host(s):</label>
-    <input type="text" id="hostInput" name="hostInput" placeholder="Enter hosts separated by blank spaces">
+    <input type="text" id="hostInput" name="hostInput" placeholder="Enter hosts separated by blank spaces.">
+    <button id="saveButton" style="display:none;">Save group</button>
+    <table id="groupTable" style="display: none;">
+        <thead>
+        <tr>
+            <th>Group Name</th>
+            <th>Hosts</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
     <label for="portInput">Port:</label>
-    <input type="text" id="portInput" name="portInput" placeholder="Enter port">
+    <input type="text" id="portInput" name="portInput" placeholder="Enter Port. Default: 830 for NETCONF, 443 for RESTCONF.">
     <label for="interfaceInput">Interface:</label>
-    <input type="text" id="interfaceInput" name="interfaceInput" placeholder="Enter interface">
+    <input type="text" id="interfaceInput" name="interfaceInput" placeholder="Enter interface.">
     <label for="usernameInput">Username:</label>
-    <input type="text" id="usernameInput" name="usernameInput" placeholder="Enter username">
+    <input type="text" id="usernameInput" name="usernameInput" placeholder="Enter username.">
     <label for="passwordInput">Password:</label>
-    <input type="text" id="passwordInput" name="passwordInput" placeholder="Enter password">
+    <input type="text" id="passwordInput" name="passwordInput" placeholder="Enter password.">
     <button id="toggleButton">Switch to NETCONF</button>
     <div id="displayText"></div>
     <div id="restconfTemplate" style="display: none;">
