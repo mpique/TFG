@@ -50,73 +50,51 @@ button {
 }
 
 button:hover {
-    background: linear-gradient(135deg, #1565c0, #1e88e5);
     transform: scale(1.05);
     box-shadow: 0 6px 12px rgba(0,0,0,0.4);
 }
 
 #saveButton {
-    background-color: #4caf50;
-    color: white;
-    border: none;
     padding: 6px 12px;
     font-size: 0.8rem;
-    border-radius: 4px;
-    cursor: pointer;
     margin-top: 8px;
-}
-
-#saveButton:hover {
-    background-color: #388e3c;
+    margin-bottom: 8px;
 }
 
 #groupTable {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 10px;
     background-color: #ffffff;
-    color: #000000;
-    margin-top: 20px;
-    table-layout: fixed;
 }
 
-#groupTable th,
-#groupTable td {
+#groupTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+}
+
+#groupTable th, #groupTable td {
     border: 1px solid #ccc;
     padding: 8px;
     text-align: left;
-    vertical-align: middle;
-    min-height: 40px;
-}
-
-#groupTable th {
-    background-color: #f0f0f0;
-    font-weight: bold;
 }
 
 .editable-input {
-    height: 100%;
-    box-sizing: border-box;
-    font-size: inherit;
-    font-family: inherit;
-    padding: 0;
-    margin: 0;
+    width: 100%;
     border: none;
     background-color: transparent;
-    width: 100%;
 }
 
 .action-btn {
-    color: white;
-    border: none;
     padding: 4px 8px;
     font-size: 0.8rem;
     border-radius: 4px;
     cursor: pointer;
     margin-left: 4px;
-}
-
-.action-btn:hover {
-    background-color: #1565c0;
+    margin-right: 4px;
 }
 
 textarea {
@@ -124,16 +102,7 @@ textarea {
     height: 200px;
 }
 
-#interfaceInfo {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    white-space: pre-wrap;
-}
-
-#rpcResponse {
+#interfaceInfo, #rpcResponse {
     margin-top: 20px;
     padding: 10px;
     border: 1px solid #ccc;
