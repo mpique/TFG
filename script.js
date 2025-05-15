@@ -118,6 +118,7 @@ $(document).ready(function() {
 
     showSaveButton();
 
+    // Send a RESTCONF request
     $('#sendRequest').click(function() {
         var hosts = $('#hostInput').val().split(' ');
         var port = $('#portInput').val();
@@ -131,7 +132,7 @@ $(document).ready(function() {
         $('#interfaceInfo').empty(); 
 
         hosts.forEach(function(host) {
-            const url = `/fetch_interface_info?host=${encodeURIComponent(host)}&port=${encodeURIComponent(port)}&interface=${encodeURIComponent(interface)}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+            const url = `/fetch_restconf_info?host=${encodeURIComponent(host)}&port=${encodeURIComponent(port)}&interface=${encodeURIComponent(interface)}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
             let options = {
                 method: httpMethod,
@@ -172,14 +173,14 @@ $(document).ready(function() {
         $('#rpcBodyInput').val(responseData);
     });
 
-    // Send an edit-config
+    // Send a NETCONF operation
     $('#sendOperation').click(function() {
         var host = $('#hostInput').val();
         var port = $('#portInput').val();
         var interface = $('#interfaceInput').val();
         var username = $('#usernameInput').val();
         var password = $('#passwordInput').val();
-        var netconf_operation = $('#operationSelect').val();
+        var netconfOperation = $('#operationSelect').val();
         var xmlBody = $('#bodyInput').val();
 
         const url = `/fetch_netconf_info?host=${encodeURIComponent(host)}&port=${encodeURIComponent(port)}&interface=${encodeURIComponent(interface)}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&netconf_operation=${encodeURIComponent(netconfOperation)}`;
@@ -206,7 +207,7 @@ $(document).ready(function() {
                 $('#rpcResponse').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
             })
             .catch(error => {
-                $('#rpcResponse').append('<pre>' + JSON.stringify(error.responseJSON, null, 2) + '</pre>');
+                $('#rpcResponse').append('<pre>'  + error.message + '</pre>');
             });
     });
 

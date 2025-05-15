@@ -10,7 +10,7 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/fetch_interface_info', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.route('/fetch_restconf_info', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def fetch_interface_info():
     host = request.args.get('host')
     port = request.args.get('port', 443)
@@ -50,22 +50,26 @@ def fetch_netconf_info():
     interface = request.args.get('interface')
     username = request.args.get('username')
     password = request.args.get('password')
-    netconf_operation = request.args.get('netconf_operation')
+    netconfOperation = request.args.get('netconfOperation')
     xml_body = request.data.decode('utf-8') if request.data else None
 
     try:
         with manager.connect(host=host, port=int(port), username=username, password=password, hostkey_verify=False) as m:
-            if netconf_operation == 'get-config':
+            if netconfOperation == 'get-config':
                 response = m.get_config(source='running')
                 result = response.xml
-            elif netconf_operation == 'edit-config':
+            elif netconfOperation == 'edit-config':
                 if not xml_body:
                     return jsonify({"error": "edit-config requires a body"}), 400
                 response = m.edit_config(target='running', config=xml_body, default_operation="merge")
                 result = response.xml
-            elif netconf_operation == 'copy-config':
+            elif netconfOperation == 'copy-config':
                 response = m.copy_config(target='running', source='startup')
                 result = response.xml
+            elif netconfOperation == 'delete-config':
+                response = m.delete_config(target='candidate')
+                result = response.xml
+
             else:
                 return jsonify({"error": "Not a supported operation"}), 400
 
