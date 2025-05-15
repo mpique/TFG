@@ -13,7 +13,7 @@ def index():
 @app.route('/fetch_interface_info', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def fetch_interface_info():
     host = request.args.get('host')
-    port = request.args.get('port')
+    port = request.args.get('port', 443)
     interface = request.args.get('interface')
     username = request.args.get('usernameInput')
     password = request.args.get('passwordInput')
