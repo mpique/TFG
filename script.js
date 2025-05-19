@@ -19,7 +19,7 @@ $(document).ready(function() {
     document.getElementById("displayText").innerHTML = document.getElementById("restconfTemplate").innerHTML;
 
     function showSaveButton() {
-        const input = document.getElementById('hostInput');
+        const input = document.getElementById('host');
         const saveButton = document.getElementById('saveButton');
         const table = document.getElementById('groupTable');
         const tbody = table.querySelector('tbody');
@@ -120,16 +120,16 @@ $(document).ready(function() {
 
     // Send a RESTCONF request
     $('#sendRequest').click(function() {
-        var hosts = $('#hostInput').val().split(' ');
-        var port = $('#portInput').val();
-        var interface = $('#interfaceInput').val();
-        var username = $('#usernameInput').val();
-        var password = $('#passwordInput').val();
+        var hosts = $('#host').val().split(' ');
+        var port = $('#port').val();
+        var interface = $('#interface').val();
+        var username = $('#username').val();
+        var password = $('#password').val();
         var method = $('#methodSelect').val();
-        var requestBody = $('#bodyInput').val();
+        var requestBody = $('#body').val();
 
         // Clear
-        $('#interfaceInfo').empty(); 
+        $('#restconfResponse').empty();
 
         hosts.forEach(function(host) {
             const url = `/fetch_restconf_info?host=${encodeURIComponent(host)}&port=${encodeURIComponent(port)}&interface=${encodeURIComponent(interface)}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
@@ -153,46 +153,49 @@ $(document).ready(function() {
                     return response.json();
                 })
                 .then(data => {
-                    $('#interfaceInfo').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
+                    $('#restconfResponse').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
                 })
                 .catch(error => {
-                    $('#interfaceInfo').append('<pre>' + JSON.stringify(error.responseJSON, null, 2) + '</pre>');
+                    $('#restconfResponse').append('<pre>' + JSON.stringify(error.responseJSON, null, 2) + '</pre>');
                 });
         });
     });
 
     // Button to copy the response to the REST body input
     $('#copyResponseButton').click(function() {
-        var responseData = $('#interfaceInfo').text();
-        $('#bodyInput').val(responseData);
+        var responseData = $('#restconfResponse').text();
+        $('#body').val(responseData);
     });
 
     // Button to copy the response to the NETCONF body input
     $('#copyRpcResponseButton').click(function() {
         var responseData = $('#rpcResponse').text();
-        $('#rpcBodyInput').val(responseData);
+        $('#rpcBody').val(responseData);
     });
 
     // Send a NETCONF operation
     $('#sendOperation').click(function() {
-        var host = $('#hostInput').val();
-        var port = $('#portInput').val();
-        var interface = $('#interfaceInput').val();
-        var username = $('#usernameInput').val();
-        var password = $('#passwordInput').val();
+        var host = $('#host').val();
+        var port = $('#port').val();
+        var interface = $('#interface').val();
+        var username = $('#username').val();
+        var password = $('#password').val();
         var netconfOperation = $('#operationSelect').val();
-        var xmlBody = $('#bodyInput').val();
+        var xmlBody = $('#body').val();
+
+        // Clear
+        $('#rpcResponse').empty();
 
         const url = `/fetch_netconf_info?host=${encodeURIComponent(host)}&port=${encodeURIComponent(port)}&interface=${encodeURIComponent(interface)}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&netconf_operation=${encodeURIComponent(netconfOperation)}`;
 
-        let options = {
-            method: netconfOperation.toUpperCase() === 'GET' ? 'GET' : 'POST',
+        const options = {
+            method: netconfOperation.toLowerCase() === 'get-config' ? 'GET' : 'POST',
             headers: {
-                "Content-Type": "application/xml"
+                'Content-Type': 'application/xml'
             }
         };
 
-        if (xmlBody && netconfOperation.toLowerCase() !== 'get-config') {
+        if (xmlBody && netconf_operation.toLowerCase() !== 'get-config') {
             options.body = xmlBody;
         }
 
@@ -208,6 +211,71 @@ $(document).ready(function() {
             })
             .catch(error => {
                 $('#rpcResponse').append('<pre>'  + error.message + '</pre>');
+            });
+    });
+
+    $('#fetchNetconfTelemetry').click(function() {
+        var host = $('#host').val();
+        var port = $('#port').val();
+        var interface = $('#interface').val();
+        var username = $('#username').val();
+        var password = $('#password').val();
+
+        // Clear
+        $('#netconfTelemetryResponse').empty();
+
+        const url = `/fetch_netconf_info?host=${encodeURIComponent(host)}&port=${encodeURIComponent(port)}&interface=${encodeURIComponent(interface)}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+
+        const options = {
+            method: netconfOperation.toLowerCase() === 'get-config' ? 'GET' : 'POST',
+            headers: {
+                'Content-Type': 'application/xml'
+            }
+        };
+
+        if (xmlBody && netconf_operation.toLowerCase() !== 'get-config') {
+            options.body = xmlBody;
+        }
+
+        fetch(url, options)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error: " + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                $('#netconfTelemetryResponse').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
+            })
+            .catch(error => {
+                $('#netconfTelemetryResponse').append('<pre>'  + error.message + '</pre>');
+            });
+    });
+
+    $('#fetchRestconfTelemetry').click(function() {
+        var host = $('#host').val();
+        var port = $('#port').val();
+        var interface = $('#interface').val();
+        var username = $('#username').val();
+        var password = $('#password').val();
+
+        // Clear
+        $('#restconfTelemetryResponse').empty();
+
+        const url = `/fetch_restconf_telemetry?host=${encodeURIComponent(host)}&port=${encodeURIComponent(port)}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&interface=${encodeURIComponent(interfaceName)}`;
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                  throw new Error("Error: " + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                $('#restconfTelemetryResponse').append('<pre>' + JSON.stringify(data, null, 2) + '</pre>');
+            })
+            .catch(error => {
+                $('#restconfTelemetryResponse').append('<pre>'  + error.message + '</pre>');
             });
     });
 

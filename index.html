@@ -11,8 +11,8 @@
 <body>
 <div class="container">
     <h1>Interface Control Panel</h1>
-    <label for="hostInput">Host(s):</label>
-    <input type="text" id="hostInput" name="hostInput" placeholder="Enter hosts separated by blank spaces.">
+    <label for="host">Host(s):</label>
+    <input type="text" id="host" name="host" placeholder="Enter hosts separated by blank spaces.">
     <button id="saveButton" style="display:none;">Save group</button>
     <table id="groupTable" style="display: none;">
         <thead>
@@ -24,14 +24,14 @@
         </thead>
         <tbody></tbody>
     </table>
-    <label for="portInput">Port:</label>
-    <input type="text" id="portInput" name="portInput" placeholder="Enter Port. Default: 830 for NETCONF, 443 for RESTCONF.">
-    <label for="interfaceInput">Interface:</label>
-    <input type="text" id="interfaceInput" name="interfaceInput" placeholder="Enter interface.">
-    <label for="usernameInput">Username:</label>
-    <input type="text" id="usernameInput" name="usernameInput" placeholder="Enter username.">
-    <label for="passwordInput">Password:</label>
-    <input type="text" id="passwordInput" name="passwordInput" placeholder="Enter password.">
+    <label for="port">Port:</label>
+    <input type="text" id="port" name="port" placeholder="Enter Port. Default: 830 for NETCONF, 443 for RESTCONF.">
+    <label for="interface">Interface:</label>
+    <input type="text" id="interface" name="interface" placeholder="Enter interface.">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" placeholder="Enter username.">
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password" placeholder="Enter password.">
     <button id="toggleButton">Switch to NETCONF</button>
     <div id="displayText"></div>
     <div id="restconfTemplate" style="display: none;">
@@ -43,13 +43,20 @@
             <option value="PUT">PUT</option>
             <option value="DELETE">DELETE</option>
         </select>
-        <label for="bodyInput">Body:</label>
-        <textarea id="bodyInput" name="bodyInput" placeholder="Enter request body"></textarea>
+        <label for="body">Body:</label>
+        <textarea id="body" name="body" placeholder="Enter request body"></textarea>
         <button id="sendRequest">Send request</button>
-        <div id="interfaceInfo">
+        <div id="restconfResponse">
         </div>
         <br>
         <button id="copyResponseButton">Copy Response to Body</button>
+        <br> <br> <hr>
+        <div>
+            <h3>RESTCONF telemetry data</h3>
+            <button id="fetchRestconfTelemetry">Fetch telemetry data</button>
+            <div id="restconfTelemetryResponse">
+            </div>
+        </div>
     </div>
     <div id="netconfTemplate" style="display: none;">
         <div class="data">
@@ -62,13 +69,20 @@
             <option value="get-config">get-config</option>
             <option value="copy-config">copy-config</option>
         </select>
-        <label for="xmlInput">XML:</label>
-        <textarea id="xmlInput" name="xmlInput" placeholder="Enter the XML body"></textarea>
+        <label for="xml">XML:</label>
+        <textarea id="xml" name="xml" placeholder="Enter the XML body"></textarea>
         <button id="sendOperation">Send operation</button>
         <div id="rpcResponse">
         </div>
         <br>
         <button id="copyRpcResponseButton">Copy Response to Body</button>
+        <br> <br> <hr>
+        <div>
+            <h3>NETCONF telemetry data</h3>
+            <button id="fetchNetconfTelemetry">Fetch telemetry data</button>
+            <div id="netconfTelemetryResponse">
+            </div>
+        </div>
     </div>
 </div>
 </body>
