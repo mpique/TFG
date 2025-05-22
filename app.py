@@ -3,6 +3,9 @@ from ncclient import manager
 from lxml import etree
 from flask import Flask, render_template, request, jsonify, Response
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from urllib.parse import quote
+from requests.auth import HTTPBasicAuth
+import webbrowser
 
 app = Flask(__name__)
 
@@ -43,6 +46,8 @@ def fetch_restconf_info():
             "status": response.status_code,
             "device_response": device_response
         }), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/fetch_restconf_telemetry", methods=["GET", "POST"])
 def fetch_restconf_telemetry():
@@ -151,4 +156,5 @@ def fetch_netconf_telemetry():
         return Response(error_xml, mimetype='application/xml', status=500)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    webbrowser.open("http://127.0.0.1:5000")
+    app.run()
