@@ -122,7 +122,7 @@ def fetch_netconf_telemetry():
     password = request.args.get('password')
     netconfOperation = request.args.get('netconfOperation', 'get')
 
-    # Filtro NETCONF para estadísticas de interfaz
+    # Default filter
     NETCONF_FILTER = f"""
     <filter>
       <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
