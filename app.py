@@ -18,7 +18,8 @@ def fetch_restconf_info():
     username = request.args.get('username')
     password = request.args.get('password')
     req_body = request.get_json(silent=True)
-    url = f"https://{host}:{port}/restconf/data/interfaces/interface={interface}"
+    encoded_interface = quote(interface, safe='')
+    url = f"https://{host}:{port}/restconf/data/ietf-interfaces:interfaces-state/interface={encoded_interface}"
 
     headers = {
         "Content-Type": "application/yang-data+json"
@@ -51,9 +52,8 @@ def fetch_restconf_telemetry():
     username = request.args.get('username')
     password = request.args.get('password')
     req_body = request.get_json(silent=True)
-
-    url = f"https://{host}:{port}/restconf/data/interfaces/interface={interface}"
-
+    encoded_interface = quote(interface, safe='')
+    url = f"https://{host}:{port}/restconf/data/ietf-interfaces:interfaces-state/interface={encoded_interface}"
     headers = {
         "Accept": "application/yang-data+json"
     }
