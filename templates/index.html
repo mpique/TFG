@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Control Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Interface Control Panel</h1>
+    <label for="host">Host(s):</label>
+    <input type="text" id="host" name="host" placeholder="Enter hosts separated by blank spaces.">
+    <button id="saveButton" style="display:none;">Save group</button>
+    <table id="groupTable" style="display: none;">
+        <thead>
+        <tr>
+            <th>Group Name</th>
+            <th>Hosts</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <label for="port">Port:</label>
+    <input type="text" id="port" name="port" placeholder="Enter Port. Default: 830 for NETCONF, 443 for RESTCONF.">
+    <label for="interface">Interface:</label>
+    <input type="text" id="interface" name="interface" placeholder="Enter interface.">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" placeholder="Enter username.">
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password" placeholder="Enter password.">
+    <button id="toggleButton">Switch to NETCONF</button>
+    <div id="displayText"></div>
+    <div id="restconfTemplate" style="display: none;">
+        <h2>RESTCONF</h2>
+        <label for="methodSelect">HTTP Method:</label>
+        <select id="methodSelect">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="DELETE">DELETE</option>
+        </select>
+        <label for="body">Body:</label>
+        <textarea id="body" name="body" placeholder="Enter request body"></textarea>
+        <button id="sendRequest">Send request</button>
+        <div id="restconfResponse">
+        </div>
+        <br>
+        <button id="copyResponseButton">Copy Response to Body</button>
+        <br> <br> <hr>
+        <div>
+            <h3>RESTCONF telemetry data</h3>
+            <button id="fetchRestconfTelemetry">Fetch telemetry data</button>
+            <div id="restconfTelemetryResponse">
+            </div>
+        </div>
+    </div>
+    <div id="netconfTemplate" style="display: none;">
+        <div class="data">
+            <h2>NETCONF</h2>
+        </div>
+        <label for="operationSelect">NETCONF Operation:</label>
+        <select id="operationSelect">
+            <option value="edit-config">edit-config</option>
+            <option value="delete-config">delete-config</option>
+            <option value="get-config">get-config</option>
+            <option value="copy-config">copy-config</option>
+        </select>
+        <label for="xml">XML:</label>
+        <textarea id="xml" name="xml" placeholder="Enter the XML body"></textarea>
+        <button id="sendOperation">Send operation</button>
+        <div id="rpcResponse">
+        </div>
+        <br>
+        <button id="copyRpcResponseButton">Copy Response to Body</button>
+        <br> <br> <hr>
+        <div>
+            <h3>NETCONF telemetry data</h3>
+            <button id="fetchNetconfTelemetry">Fetch telemetry data</button>
+            <div id="netconfTelemetryResponse">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
